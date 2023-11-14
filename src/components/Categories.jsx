@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Categories = () => {
+    const [activeMenu, setActiveMenu] = useState();
+    const categoriesPizza = ['Все','Мясная', 'Вегетарианская', 'Гриль', 'Острая', 'Закрытые']
     return (
         <div className="categories">
             <ul>
-                <li className="active">Все</li>
-                <li>Мясные</li>
-                <li>Вегетарианская</li>
-                <li>Гриль</li>
-                <li>Острые</li>
-                <li>Закрытые</li>
+                {
+                    categoriesPizza.map((category, index) => (
+                        <li
+                        className={activeMenu === index? 'active' : ''}
+                        onClick={()=> setActiveMenu(index)}
+                        >{category}</li>
+                    ))
+                }
+             
             </ul>
         </div>
     );

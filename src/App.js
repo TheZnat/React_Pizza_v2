@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Categories from "./components/Categories";
 import Sort from "./components/Sort";
 import PizzaBlock from "./components/PizzaBlock";
+import pizzas from "./assets/pizzas.json"
 
 function App() {
    return(
@@ -19,26 +20,17 @@ function App() {
                    </div>
                    <h2 className="content__title">Все пиццы</h2>
                    <div className="content__items">
-                      <PizzaBlock
-                        title="Чизбургер-пицца"
-                        price={395}
-                      />
-                       <PizzaBlock
-                           title="Чизбургер-пицца"
-                           price={395}
-                       />
-                       <PizzaBlock
-                           title="Чизбургер-пицца"
-                           price={395}
-                       />
-                       <PizzaBlock
-                           title="Чизбургер-пицца"
-                           price={395}
-                       />
-                       <PizzaBlock
-                           title="Чизбургер-пицца"
-                           price={395}
-                       />
+                    {
+                        pizzas.map(({title, price, imageUrl, sizes, types}) => (
+                            <PizzaBlock
+                                title={title}
+                                price={price}
+                                img={imageUrl}
+                                sizes={sizes}
+                                typePizza={types}
+                            />
+                        ))
+                    } 
                    </div>
                </div>
            </div>

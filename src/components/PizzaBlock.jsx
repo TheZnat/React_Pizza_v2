@@ -1,26 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const PizzaBlock = ({title, price}) => {
-
+const PizzaBlock = ({title, price, img, sizes, typePizza}) => {
+    const typeName = ['тонкое', 'традиционное']
+    const [activeTypePizza, setActiveTypePizza] = useState("")
+    const [activeSizePizza, setActiveSizePizza] = useState("")
 
     return (
         <div className="pizza-block">
             <img
                 className="pizza-block__image"
-                src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
+                src={img}
                 alt="Pizza"
             />
             <h4 className="pizza-block__title">{title}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    <li className="active">тонкое</li>
-                    <li>традиционное</li>
+                    {
+                        typePizza.map((itemTypePizza, index) =>(
+                            <li
+                            className={activeTypePizza === itemTypePizza ? 'active' : ''}
+                            onClick={() => setActiveTypePizza(itemTypePizza)}
+                            key={index}
+                            >
+                            {typeName[itemTypePizza]}
+                            </li>
+
+                        ))
+                    }
                 </ul>
                 <ul>
-                    <li className="active">26 см.
-                    </li>
-                    <li>30 см.</li>
-                    <li>40 см.</li>
+                    {
+                        sizes.map((size, index) => (
+                            <li
+                            className={activeSizePizza === index ? 'active' : ''}
+                            onClick={() => setActiveSizePizza(index)}
+                            key={index}
+                            >
+                            {size} см.
+                            </li>
+                        ))
+                    }
                 </ul>
             </div>
             <div className="pizza-block__bottom">
