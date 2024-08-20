@@ -15,8 +15,7 @@ const PizzaBlock = ({title, price, img, sizes, typePizza}) => {
             <h4 className="pizza-block__title">{title}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    {
-                        typePizza.map((itemTypePizza, index) =>(
+                    { typePizza.map((itemTypePizza, index) =>(
                             <li
                             className={activeTypePizza === itemTypePizza ? 'active' : ''}
                             onClick={() => setActiveTypePizza(itemTypePizza)}
@@ -24,7 +23,6 @@ const PizzaBlock = ({title, price, img, sizes, typePizza}) => {
                             >
                             {typeName[itemTypePizza]}
                             </li>
-
                         ))
                     }
                 </ul>

@@ -1,43 +1,28 @@
-import './App.css';
-import React from 'react';
-import './scss/app.scss';
-
+import "./App.css";
+import React from "react";
+import "./scss/app.scss";
 import Header from "./components/Header";
-import Categories from "./components/Categories";
-import Sort from "./components/Sort";
-import PizzaBlock from "./components/PizzaBlock";
-import pizzas from "./assets/pizzas.json"
+import Home from "./Page/Home";
+import NotFound from "./Page/NotFound";
+import Cart from "./Page/Cart";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-   return(
-       <div className="wrapper">
-           <Header />
-           <div className="content">
-               <div className="container">
-                   <div className="content__top">
-                       <Categories/>
-                       <Sort/>
-                   </div>
-                   <h2 className="content__title">Все пиццы</h2>
-                   <div className="content__items">
-                    {
-                        pizzas.map(({title, price, imageUrl, sizes, types}) => (
-                            <PizzaBlock
-                                title={title}
-                                price={price}
-                                img={imageUrl}
-                                sizes={sizes}
-                                typePizza={types}
-                            />
-                        ))
-                    } 
-                   </div>
-               </div>
-           </div>
-       </div>
-   );
-
-
+  return (
+    <div className="wrapper">
+      <Header />
+      <div className="content">
+        <div className="container">
+          <Routes>
+            <Route path="" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+          {/* <NotFound /> */}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default App;

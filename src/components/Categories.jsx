@@ -11,6 +11,7 @@ const Categories = () => {
                         <li
                         className={activeMenu === index? 'active' : ''}
                         onClick={()=> setActiveMenu(index)}
+                        key={index}
                         >{category}</li>
                     ))
                 }
