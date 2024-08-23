@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Categories = () => {
-    const [activeMenu, setActiveMenu] = useState();
+const Categories = ({value, onClinkCategory}) => {
     const categoriesPizza = ['Все','Мясная', 'Вегетарианская', 'Гриль', 'Острая', 'Закрытые']
     return (
         <div className="categories">
@@ -9,8 +8,8 @@ const Categories = () => {
                 {
                     categoriesPizza.map((category, index) => (
                         <li
-                        className={activeMenu === index? 'active' : ''}
-                        onClick={()=> setActiveMenu(index)}
+                        className={value === index? 'active' : ''}
+                        onClick={()=> onClinkCategory(index)}
                         key={index}
                         >{category}</li>
                     ))
