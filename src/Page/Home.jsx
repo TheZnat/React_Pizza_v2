@@ -3,6 +3,7 @@ import Skeleton from "../components/PuzzaBloack/Skeleton";
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from "../components/PuzzaBloack";
+import Pagination from "../components/Pagination";
 
 const Home = () => {
     const [items, setItems] = useState([]);
@@ -12,6 +13,10 @@ const Home = () => {
       name: 'популярности',
       sortProperty: "rating",
     });
+
+   
+    const [currentPage, setCurrentPage] = useState(1);
+    const [countInfoInPage] = useState(8);
   
   
     useEffect(() => {
@@ -31,6 +36,12 @@ const Home = () => {
         window.scrollTo(0, 0);
     }, [categories, sortType]);
 
+    const lastPizzaIndex = currentPage * countInfoInPage;
+    const firstPizzaIndex = lastPizzaIndex - countInfoInPage;
+    const currentPizza = items.slice(firstPizzaIndex, lastPizzaIndex);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
     return (
         <div className="container">
          <div className="content__top">
@@ -41,7 +52,7 @@ const Home = () => {
           <div className="content__items">
           {isLoading
     ? [...new Array(6)].map((_, index) => <Skeleton key={index} />)
-    : Array.isArray(items) ? items.map(({ title, price, imageUrl, sizes, types }, index) => (
+    : Array.isArray(currentPizza) ? currentPizza.map(({ title, price, imageUrl, sizes, types }, index) => (
         <PizzaBlock
           title={title}
           price={price}
@@ -52,6 +63,12 @@ const Home = () => {
         />
       )) : null}
           </div>
+          <Pagination 
+          countInfoInPage={countInfoInPage}
+          totalCount={items.length}
+          paginateFun = {paginate} 
+          currentPage = {currentPage}
+           />
         </div>
     );
 };
