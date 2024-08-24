@@ -16,6 +16,7 @@ const Home = () => {
       sortProperty: "rating",
     });
 
+    // данные для пагинции 
     const [currentPage, setCurrentPage] = useState(1);
     const [countInfoInPage] = useState(8);
   
@@ -24,8 +25,9 @@ const Home = () => {
       const sortBy = sortType.sortProperty.replace("-", "");
       const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
       const category = categories > 0 ? `category=${categories}` : '';
+      const search = searchValue ? `&search=${searchValue}` : '';
 
-      fetch(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}`)
+      fetch(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
         .then((res) => {
           return res.json();
         })
@@ -34,19 +36,23 @@ const Home = () => {
           setIsLoading(false);
         });
         window.scrollTo(0, 0);
-    }, [categories, sortType]);
+    }, [categories, sortType, searchValue]);
 
+    // пагинация
     const lastPizzaIndex = currentPage * countInfoInPage;
     const firstPizzaIndex = lastPizzaIndex - countInfoInPage;
     const currentPizza = items.slice(firstPizzaIndex, lastPizzaIndex);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    let pizzas = currentPizza.filter(obj => {
-      if(obj.title.toLowerCase().includes(searchValue.toLowerCase())){
-        return true;
-      }
-      return false;
-    }).map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
+    // Поиск питц через js пиццы 
+    // let pizzas = currentPizza.filter(obj => {
+    //   if(obj.title.toLowerCase().includes(searchValue.toLowerCase())){
+    //     return true;
+    //   }
+    //   return false;
+    // }).map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
+
+    let pizzas = currentPizza.map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
 
     return (
