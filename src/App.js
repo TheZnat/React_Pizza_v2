@@ -22,7 +22,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
-          {/* <NotFound /> */}
         </div>
       </SearchContext.Provider>
     </div>

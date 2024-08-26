@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Skeleton from "../components/PuzzaBloack/Skeleton";
+import axios from 'axios';
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaBlock from "../components/PuzzaBloack";
@@ -18,8 +19,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const {categoriesId, sort} = useSelector((state) => state.filterSlice);
   const sortType = sort.sortProperty;
-  console.log(categoriesId);
-  console.log(sortType);
   const onChangeCategory = (id) => {
       dispatch(setCategoryId(id));
   };
@@ -29,22 +28,57 @@ const Home = () => {
   const [countInfoInPage] = useState(8);
 
   useEffect(() => {
-      setIsLoading(true);
-      const sortBy = sortType.replace("-", "");
-      const order = sortType.includes("-") ? "asc" : "desc";
-      const category = categoriesId > 0 ? `category=${categoriesId}` : '';
-      const search = searchValue ? `&search=${searchValue}` : '';
-
-      fetch(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          setItems(data);
-          setIsLoading(false);
-        });
-        window.scrollTo(0, 0);
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const sortBy = sortType.replace("-", "");
+        const order = sortType.includes("-") ? "asc" : "desc";
+        const category = categoriesId > 0 ? `category=${categoriesId}` : '';
+        const search = searchValue ? `&search=${searchValue}` : '';
+  
+        const { data } = await axios.get(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`);
+        setItems(data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.status === 404) {
+            // Специальная обработка для 404 ошибки
+            setItems([]);
+          } else {
+            console.error('Ошибка при выполнении запроса:', error.message);
+          }
+        } else {
+          console.error('Неизвестная ошибка:', error);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchData();
+    window.scrollTo(0, 0);
   }, [categoriesId, sortType, searchValue]);
+
+  // useEffect(() => {
+  //     setIsLoading(true);
+  //     const sortBy = sortType.replace("-", "");
+  //     const order = sortType.includes("-") ? "asc" : "desc";
+  //     const category = categoriesId > 0 ? `category=${categoriesId}` : '';
+  //     const search = searchValue ? `&search=${searchValue}` : '';
+
+  //     try{
+  //       axios.get(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
+  //       .then((res) => {
+  //         setItems(res.data);
+  //         setIsLoading(false);
+  //       })
+
+  //     }catch(err){
+  //       setItems([]);
+  //     }
+
+     
+  //       window.scrollTo(0, 0);
+  // }, [categoriesId, sortType, searchValue]);
 
   // пагинация
   const lastPizzaIndex = currentPage * countInfoInPage;
