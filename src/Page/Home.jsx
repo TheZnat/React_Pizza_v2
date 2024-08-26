@@ -5,26 +5,34 @@ import Sort from '../components/Sort';
 import PizzaBlock from "../components/PuzzaBloack";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId } from "../Redux/slices/filterSlice";
 
 const Home = () => {
   const {searchValue} = useContext(SearchContext);
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [categories, setCategories] = useState(0);
-    const [sortType, setSortType] = useState({
-      name: 'популярности',
-      sortProperty: "rating",
-    });
+  // Состояние для получения с бека питцы 
+  const [items, setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // данные для пагинции 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [countInfoInPage] = useState(8);
-  
-    useEffect(() => {
+  // Recux категории питццы
+  const dispatch = useDispatch();
+  const {categoriesId, sort} = useSelector((state) => state.filterSlice);
+  const sortType = sort.sortProperty;
+  console.log(categoriesId);
+  console.log(sortType);
+  const onChangeCategory = (id) => {
+      dispatch(setCategoryId(id));
+  };
+
+  // данные для пагинции 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [countInfoInPage] = useState(8);
+
+  useEffect(() => {
       setIsLoading(true);
-      const sortBy = sortType.sortProperty.replace("-", "");
-      const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
-      const category = categories > 0 ? `category=${categories}` : '';
+      const sortBy = sortType.replace("-", "");
+      const order = sortType.includes("-") ? "asc" : "desc";
+      const category = categoriesId > 0 ? `category=${categoriesId}` : '';
       const search = searchValue ? `&search=${searchValue}` : '';
 
       fetch(`https://65bb9d1052189914b5bca563.mockapi.io/items?${category}&sortBy=${sortBy}&order=${order}${search}`)
@@ -36,13 +44,13 @@ const Home = () => {
           setIsLoading(false);
         });
         window.scrollTo(0, 0);
-    }, [categories, sortType, searchValue]);
+  }, [categoriesId, sortType, searchValue]);
 
-    // пагинация
-    const lastPizzaIndex = currentPage * countInfoInPage;
-    const firstPizzaIndex = lastPizzaIndex - countInfoInPage;
-    const currentPizza = items.slice(firstPizzaIndex, lastPizzaIndex);
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // пагинация
+  const lastPizzaIndex = currentPage * countInfoInPage;
+  const firstPizzaIndex = lastPizzaIndex - countInfoInPage;
+  const currentPizza = items.slice(firstPizzaIndex, lastPizzaIndex);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     // Поиск питц через js пиццы 
     // let pizzas = currentPizza.filter(obj => {
@@ -52,14 +60,14 @@ const Home = () => {
     //   return false;
     // }).map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
 
-    let pizzas = currentPizza.map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
-    const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
+  let pizzas = currentPizza.map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
+  const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
 
     return (
         <div className="container">
          <div className="content__top">
-            <Categories  value={categories}  onClinkCategory={(id) =>setCategories(id)}/>
-            <Sort value={sortType} onClinkSortType={(id) => setSortType(id)}/>
+            <Categories  value={categoriesId}  onClinkCategory={onChangeCategory}/>
+            <Sort />
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
