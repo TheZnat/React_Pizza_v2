@@ -140,7 +140,7 @@ const Home = () => {
     //   return false;
     // }).map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
 
-  let pizzas = currentPizza.map(({ title, price, imageUrl, sizes, types }, index) => (<PizzaBlock title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
+  let pizzas = currentPizza.map(({id, title, price, imageUrl, sizes, types }, index) => (<PizzaBlock id={id} title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
 
     return (
