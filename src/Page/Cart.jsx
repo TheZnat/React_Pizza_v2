@@ -1,11 +1,27 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import CartItem from '../components/CartItem';
+import CartItem from '../components/Cart/CartItem';
+import { clearItems } from '../Redux/slices/cartSlice';
+import CartEmpty from '../components/Cart/CartEmpty';
+
 
 const Cart = () => {
-  const items = useSelector(state => state.cartSlice.items);
+
+  const {items, totalPrice} = useSelector(state => state.cartSlice)
   const dispatch = useDispatch();
+  const totalCount = items.reduce((sum, item) => sum + item.count, 0);
+
+  const onClickClear = () =>{
+    const userConfirmed = window.confirm("Очистить корзину")
+    if( userConfirmed ){
+        dispatch(clearItems())
+    }
+  }
+
+  if (!totalPrice) {
+    return <CartEmpty />;
+  }
 
 
     return (
@@ -40,7 +56,7 @@ const Cart = () => {
               </svg>
               Корзина
             </h2>
-            <div className="cart__clear">
+            <div className="cart__clear" onClick={onClickClear}>
               <svg
                 width="20"
                 height="20"
@@ -76,7 +92,13 @@ const Cart = () => {
               <span>Очистить корзину</span>
             </div>
           </div>
-          <div className="content__items">
+          <div 
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+      
+          }}>
             {
               items.map(item => (
                 <CartItem key={item.id} {...item} />
@@ -88,11 +110,11 @@ const Cart = () => {
             <div className="cart__bottom-details">
               <span>
                
-                Всего пицц: <b>.</b>{' '}
+                Всего пицц: <b>{totalCount}</b>{' '}
               </span>
               <span>
                 {' '}
-                Сумма заказа: <b> ₽</b>{' '}
+                Сумма заказа: <b>{totalPrice} ₽</b>{' '}
               </span>
             </div>
             <div className="cart__bottom-buttons">
