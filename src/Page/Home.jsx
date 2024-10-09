@@ -7,8 +7,8 @@ import PizzaBlock from "../components/PuzzaBloack";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { setCategoryId, setFilters, setSort } from "../Redux/slices/filterSlice";
-import { fetchPizzas } from "../Redux/slices/pizzasSlice";
+import { selectFilter, setCategoryId, setFilters, setSort } from "../Redux/slices/filterSlice";
+import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -16,19 +16,16 @@ const Home = () => {
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
-  const {searchValue} = useContext(SearchContext);
 
   // Recux категории питццы
   const dispatch = useDispatch();
-  const {categoriesId, sort} = useSelector((state) => state.filterSlice);
-  const {items, status} = useSelector((state) => state.pizzasSlice);
+  const {categoriesId, sort, searchValue} = useSelector(selectFilter);
+  const {items, status} = useSelector(selectPizzaData);
   const sortType = sort.sortProperty 
 
- 
   const onChangeCategory = (id) => {
       dispatch(setCategoryId(id));
   };
-
 
   const fetchData = async () => {
       const sortBy = sortType.replace("-", "");
@@ -39,7 +36,6 @@ const Home = () => {
       dispatch(fetchPizzas({
         category, sortBy, order, search
       }));
-    
   }
 
     // title страницы 
