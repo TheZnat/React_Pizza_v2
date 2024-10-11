@@ -9,7 +9,7 @@ import { SearchContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFilter, setCategoryId, setFilters, setSort } from "../Redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
   // title страницы 
@@ -88,7 +88,9 @@ const Home = () => {
   const currentPizza = items.slice(firstPizzaIndex, lastPizzaIndex);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  let pizzas = currentPizza.map(({id, title, price, imageUrl, sizes, types }, index) => (<PizzaBlock id={id} title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index} />));
+  let pizzas = currentPizza.map(({id, title, price, imageUrl, sizes, types }, index) => (
+      <PizzaBlock id={id} title={title} price={price} img={imageUrl} sizes={sizes} typePizza={types} key={index}/>
+));
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />)
 
     return (

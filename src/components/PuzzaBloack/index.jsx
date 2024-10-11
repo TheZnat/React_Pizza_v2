@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItems, selectCartItemById } from '../../Redux/slices/cartSlice';
+import { Link } from 'react-router-dom';
 
 const PizzaBlock = ({id,title, price, img, sizes, typePizza}) => {
     const typeName = ['тонкое', 'традиционное']
@@ -26,12 +27,15 @@ const PizzaBlock = ({id,title, price, img, sizes, typePizza}) => {
     return (
         <div className="pizza-block-wrapper">
         <div className="pizza-block">
+            <Link to={`/pizza/${id}`}>
             <img
                 className="pizza-block__image"
                 src={img}
                 alt="Pizza"
             />
+          
             <h4 className="pizza-block__title">{title}</h4>
+            </Link>
             <div className="pizza-block__selector">
                 <ul>
                     { typePizza.map((itemTypePizza, index) =>(
@@ -76,7 +80,6 @@ const PizzaBlock = ({id,title, price, img, sizes, typePizza}) => {
                     </svg>
                     <span>Добавить</span>
                     {addedCount > 0 && <i>{addedCount}</i>}
-                
                 </div>
             </div>
         </div>
