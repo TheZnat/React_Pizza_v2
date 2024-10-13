@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Skeleton from "../components/PuzzaBloack/Skeleton";
 import qs from 'qs';
 import Categories from '../components/Categories';
 import Sort, { list } from '../components/Sort';
 import PizzaBlock from "../components/PuzzaBloack";
 import Pagination from "../components/Pagination";
-import { SearchContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFilter, setCategoryId, setFilters, setSort } from "../Redux/slices/filterSlice";
+import { selectFilter, setCategoryId, setFilters } from "../Redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   // title страницы 
@@ -49,7 +48,6 @@ const Home = () => {
         sort
       }))
       isSearch.current = true;
-     
     }
   },[])
 
