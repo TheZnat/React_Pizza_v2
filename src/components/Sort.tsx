@@ -28,11 +28,13 @@ const Sort: React.FC = () => {
   };
 
   useEffect(() => {
-    const handlerClickOutside = (event: any) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const handlerClickOutside = (event: MouseEvent) => {
+      // Проверка, что sortRef.current не равен null
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setIsVisible(false);
       }
     };
+
     document.body.addEventListener("click", handlerClickOutside);
     return () =>
       document.body.removeEventListener("click", handlerClickOutside);
