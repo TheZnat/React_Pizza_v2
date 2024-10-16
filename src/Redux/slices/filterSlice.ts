@@ -34,9 +34,11 @@ export const filterSlice = createSlice({
     setSort(state, action: PayloadAction<TSort>) {
       state.sort = action.payload;
     },
-    setFilters(state, action) {
-      state.sort = action.payload.sort;
-      state.categoriesId = Number(action.payload.categoriesId);
+    setFilters(state, action: PayloadAction<FilterSliceState>) {
+      const { searchValue, categoriesId, sort } = action.payload;
+      state.searchValue = searchValue;
+      state.categoriesId = Number(categoriesId);
+      state.sort = sort;
     },
   },
 });

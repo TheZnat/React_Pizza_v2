@@ -10,6 +10,7 @@ import {
   selectFilter,
   setCategoryId,
   setFilters,
+  TSort,
 } from "../Redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,12 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
+  let defaultName = [
+    {
+      name: "популярности",
+      sortProperty: "rating",
+    },
+  ];
 
   // Recux категории питццы
   const dispatch = useDispatch();
@@ -52,12 +59,26 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-      const sort = list.find((obj) => obj.sortProperty === params.sortProperty);
+      const sort =
+        list.find((obj) => obj.sortProperty === params.sortProperty) ||
+        defaultName;
+
+      // Приведение типов для безопасной работы с params
+      const searchValue = (
+        typeof params.searchValue === "string"
+          ? params.searchValue
+          : Array.isArray(params.searchValue)
+          ? params.searchValue[0]
+          : ""
+      ) as string;
+
+      const categoriesId = Number(params.categoriesId) || 0; // Приведение к числу
 
       dispatch(
         setFilters({
-          ...params,
-          sort,
+          searchValue, // Теперь это всегда string
+          categoriesId, // Убедитесь, что это число
+          sort: sort as TSort, // Убедитесь, что sort имеет правильный тип
         })
       );
       isSearch.current = true;
