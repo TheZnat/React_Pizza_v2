@@ -13,15 +13,7 @@ import {
 } from "../Redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
 import { useNavigate } from "react-router-dom";
-
-type PizzaType = {
-  id: string;
-  title: string;
-  price: number;
-  imageUrl: string;
-  sizes: number[];
-  types: number[];
-};
+import { useAppDispatch } from "../Redux/hooks";
 
 const Home: React.FC = () => {
   // title страницы
@@ -31,6 +23,7 @@ const Home: React.FC = () => {
 
   // Recux категории питццы
   const dispatch = useDispatch();
+  const newDispath = useAppDispatch();
   const { categoriesId, sort, searchValue } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
   const sortType = sort.sortProperty;
@@ -45,7 +38,7 @@ const Home: React.FC = () => {
     const category = categoriesId > 0 ? `category=${categoriesId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
     // @ts-ignore
-    dispatch(
+    newDispath(
       fetchPizzas({
         category,
         sortBy,
@@ -103,10 +96,7 @@ const Home: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   let pizzas = currentPizza.map(
-    (
-      { id, title, price, imageUrl, sizes, types }: PizzaType,
-      index: number
-    ) => (
+    ({ id, title, price, imageUrl, sizes, types }, index) => (
       <PizzaBlock
         id={id}
         title={title}
