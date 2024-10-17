@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Skeleton from "../components/PuzzaBloack/Skeleton";
 import qs from "qs";
 import Categories from "../components/Categories";
@@ -35,9 +35,9 @@ const Home: React.FC = () => {
   const { items, status } = useSelector(selectPizzaData);
   const sortType = sort.sortProperty;
 
-  const onChangeCategory = (id: number) => {
+  const onChangeCategory = useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  }, []);
 
   const fetchData = async () => {
     const sortBy = sortType.replace("-", "");
@@ -108,7 +108,7 @@ const Home: React.FC = () => {
       navigate(`?${queryStrung}`);
     }
     isMounted.current = true;
-  }, [categoriesId, sort.sortProperty, searchValue]);
+  }, [categoriesId, sort.sortProperty]);
 
   // пагинация
   const lastPizzaIndex = currentPage * countInfoInPage;

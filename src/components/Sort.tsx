@@ -1,11 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSort, setSort, TSort } from "../Redux/slices/filterSlice";
-
-type ListItem = {
-  name: string;
-  sortProperty: string;
-};
 
 export const list: TSort[] = [
   { name: "популярности (DESC)", sortProperty: "rating" },
@@ -16,7 +11,7 @@ export const list: TSort[] = [
   { name: "алфавиту (ASC)", sortProperty: "-title" },
 ];
 
-const Sort: React.FC = () => {
+const Sort: React.FC = memo(() => {
   const sort = useSelector(selectSort);
   const dispatch = useDispatch();
   const sortRef = useRef<HTMLDivElement>(null);
@@ -77,6 +72,6 @@ const Sort: React.FC = () => {
       )}
     </div>
   );
-};
+});
 
 export default Sort;
