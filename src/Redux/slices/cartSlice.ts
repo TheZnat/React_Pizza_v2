@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { calcTotalPrice } from "../../utils/calcilationPrice";
+
 
 export type CartItem = {
   id: string;
@@ -17,8 +19,11 @@ interface CartSliceState {
 }
 
 const initialState: CartSliceState = {
-  totalPrice: 0,
-  items: [],
+  totalPrice:
+    calcTotalPrice(JSON.parse(localStorage.getItem("cart") ?? "[]")) || 0,
+  items: localStorage.getItem("cart")
+    ? JSON.parse(localStorage.getItem("cart") || "{}")
+    : [],
 };
 
 const cartSlice = createSlice({
@@ -48,9 +53,12 @@ const cartSlice = createSlice({
 
     removeItems(state, action: PayloadAction<string>) {
       state.items = state.items.filter((obj) => obj.id !== action.payload);
+      localStorage.setItem("cart", JSON.stringify(state.items));
+      state.totalPrice = calcTotalPrice(state.items);
     },
     clearItems(state) {
       state.items = [];
+      localStorage.clear();
       state.totalPrice = 0;
     },
   },
