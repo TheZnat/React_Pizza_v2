@@ -6,13 +6,11 @@ import Sort, { list } from "../components/Sort";
 import PizzaBlock from "../components/PuzzaBloack";
 import Pagination from "../components/Pagination";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectFilter,
-  setCategoryId,
-  setFilters,
-  TSort,
-} from "../Redux/slices/filterSlice";
-import { fetchPizzas, selectPizzaData } from "../Redux/slices/pizzasSlice";
+import { setCategoryId, setFilters } from "../Redux/slices/filter/filterSlice";
+import { selectFilter } from "../Redux/slices/filter/selectors";
+import { TSort } from "../Redux/slices/filter/types";
+import { fetchPizzas } from "../Redux/slices/piazza/pizzasSlice";
+import { selectPizzaData } from "../Redux/slices/piazza/selector";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../Redux/hooks";
 

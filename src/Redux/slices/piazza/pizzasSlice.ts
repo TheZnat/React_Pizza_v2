@@ -1,36 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { RootState } from "../store";
-
-// Тип для аргументов запроса пицц
-interface FetchPizzasArgs {
-  category: string;
-  sortBy: string;
-  order: string;
-  search: string;
-}
-
-// Тип для описания пиццы
-type Pizza = {
-  id: string;
-  title: string;
-  price: number;
-  imageUrl: string;
-  sizes: number[];
-  types: number[];
-};
-
-export enum Status {
-  LOADING = "loading",
-  SUCCESS = "success",
-  ERROR = "error",
-}
-
-// Тип состояния слайса
-interface PizzaSliceState {
-  items: Pizza[];
-  status: Status;
-}
+import { FetchPizzasArgs, Pizza, PizzaSliceState, Status  } from "./types";
 
 // Начальное состояние
 const initialState: PizzaSliceState = {
@@ -79,8 +49,7 @@ const pizzasSlice = createSlice({
   },
 });
 
-// Селектор для получения данных пицц
-export const selectPizzaData = (state: RootState) => state.pizzasSlice;
+
 
 // Экспорт экшенов
 export const { setItems } = pizzasSlice.actions;
